@@ -1,10 +1,27 @@
+import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 import UserCardDetails from '../components/UserCardDetails';
-import { dummyUsers } from '../data/api';
+import { getSingleUser } from '../data/api';
 
-const UserDetails = (): JSX.Element => {
+const UserDetails = () => {
   const { login } = useParams<'login'>();
-  const user = dummyUsers.filter((item) => item.login === login)[0];
+  const {
+    data: user,
+    isLoading,
+    isError,
+    error,
+  } = useQuery(['user', login], () => getSingleUser(login!));
+
+  if (isLoading) return <p>Loading...</p>;
+
+  // if (isError) {
+  //   return <div>Error loading user data: {error?.message}</div>;
+  // }
+
+  if (!user) {
+    return <div>User not found</div>;
+  }
+
   return <UserCardDetails user={user} />;
 };
 

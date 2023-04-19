@@ -1,3 +1,5 @@
+import { request } from '../utils';
+
 export const dummyUsers = [
   {
     login: 'johnsmith',
@@ -32,3 +34,30 @@ export const dummyUsers = [
     following: 24,
   },
 ];
+
+interface RequestProps {
+  query: string;
+  pageParam?: number;
+}
+
+export const getUsers = async ({ query, pageParam }: RequestProps) => {
+  const perPage = 10;
+  const url = `https://api.github.com/search/users?q=${query}&page=${pageParam}&per_page=${perPage}`;
+
+  const response = await request(url).then((result) => {
+    const hasNext = pageParam! * perPage < parseInt(result.total_count);
+    return {
+      nextPage: hasNext ? pageParam! + 1 : undefined,
+      items: result.items,
+      total_count: result.total_count,
+    };
+  });
+  return response;
+};
+
+export const getSingleUser = async (query: string) => {
+  const url = `https://api.github.com/users/${query}`;
+
+  const response = await request(url);
+  return response;
+};

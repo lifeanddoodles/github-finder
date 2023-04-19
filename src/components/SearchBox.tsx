@@ -5,6 +5,7 @@ interface SearchBoxProps {
   placeholder: string;
   queryText: string;
   setQueryText: Dispatch<SetStateAction<string>>;
+  onSubmit: Dispatch<React.SetStateAction<boolean>>;
 }
 
 const SearchBox: React.FC<SearchBoxProps> = ({
@@ -12,6 +13,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({
   placeholder,
   queryText,
   setQueryText,
+  onSubmit,
 }) => {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setQueryText(event.target.value);
@@ -19,7 +21,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({
 
   const handleKeyRelease = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key !== 'Enter') return;
-    if (queryText) console.log(queryText);
+    if (queryText) onSubmit((prev) => !!prev);
   };
 
   return (
