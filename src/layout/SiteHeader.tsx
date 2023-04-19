@@ -4,7 +4,7 @@ const SiteHeader = (): JSX.Element => {
   return (
     <Header>
       <h1>
-        <img src='./images/Everlance-logo.png' alt='Everlance' />
+        <img src='/images/Everlance-logo.png' alt='Everlance' />
       </h1>
     </Header>
   );
