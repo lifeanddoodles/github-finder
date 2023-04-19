@@ -1,6 +1,9 @@
 export const homePageTexts = {
   title: 'GitHub Users',
   buttonLabel: 'View profile',
+  totalResults: 'total results',
+  searchBoxLabel: 'Search for GitHub user(s)',
+  searchBoxPlaceholder: 'Enter username or email',
 };
 export const userCardTexts = {
   getAriaLabel: (login: string) => `Visit ${login}'s GitHub page`,
