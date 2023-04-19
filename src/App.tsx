@@ -1,18 +1,17 @@
+import { Route, Routes } from 'react-router-dom';
 import './App.css';
-import Header from './layout/Header';
-import Main from './layout/Main';
-import ResultsSection from './layout/ResultsSection';
-import SiteHeader from './layout/SiteHeader';
+import PageWrapper from './layout/PageWrapper';
+import Home from './pages/Home';
+import UserDetails from './pages/UserDetails';
 
 function App() {
   return (
-    <div className='App'>
-      <SiteHeader />
-      <Main>
-        <Header>GitHub Users</Header>
-        <ResultsSection>TODO</ResultsSection>
-      </Main>
-    </div>
+    <Routes>
+      <Route path='/' element={<PageWrapper />}>
+        <Route index element={<Home />} />
+        <Route path='/users/:login' element={<UserDetails />} />
+      </Route>
+    </Routes>
   );
 }
 

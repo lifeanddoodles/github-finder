@@ -1,6 +1,6 @@
 import Header from './Header';
 
-const SiteHeader = () => {
+const SiteHeader = (): JSX.Element => {
   return (
     <Header>
       <h1>
