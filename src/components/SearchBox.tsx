@@ -6,6 +6,7 @@ interface SearchBoxProps {
   queryText: string;
   setQueryText: Dispatch<SetStateAction<string>>;
   onSubmit: Dispatch<React.SetStateAction<boolean>>;
+  className?: string;
 }
 
 const SearchBox: React.FC<SearchBoxProps> = ({
@@ -14,6 +15,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({
   queryText,
   setQueryText,
   onSubmit,
+  className,
 }) => {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setQueryText(event.target.value);
@@ -25,14 +27,15 @@ const SearchBox: React.FC<SearchBoxProps> = ({
   };
 
   return (
-    <label htmlFor='search-user'>
-      <span>{label}</span>
+    <label htmlFor='search-user' className={className}>
+      <span className='sr-only'>{label}</span>
       <input
         id='search-user'
         type='search'
         placeholder={placeholder}
         onChange={handleChange}
         onKeyUp={handleKeyRelease}
+        className='border-2 rounded-md px-2.5 py-3 w-full'
       />
     </label>
   );

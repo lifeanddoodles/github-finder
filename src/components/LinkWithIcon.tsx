@@ -5,6 +5,7 @@ interface LinkWithIconProps {
   label?: string;
   icon: string;
   url: string;
+  className?: string;
 }
 
 const LinkWithIcon: React.FC<LinkWithIconProps> = ({
@@ -12,9 +13,16 @@ const LinkWithIcon: React.FC<LinkWithIconProps> = ({
   label,
   icon,
   url,
+  className,
 }) => {
   return (
-    <a href={url} aria-label={ariaLabel} target='_blank' rel='noreferrer'>
+    <a
+      href={url}
+      aria-label={ariaLabel}
+      target='_blank'
+      rel='noreferrer'
+      className={className}
+    >
       {icon}
       {label ? ` ${label}` : ''}
     </a>
