@@ -4,7 +4,7 @@ import SearchBox from '../components/SearchBox';
 import UserCard from '../components/UserCard';
 import { getUsers } from '../data/api';
 import { homePageTexts } from '../data/texts';
-import { PageProps, UserProps } from '../interfaces';
+import { ErrorProps, GetUsersItem, GetUsersResponse } from '../interfaces';
 import Header from '../layout/Header';
 import ResultsSection from '../layout/ResultsSection';
 
@@ -40,11 +40,16 @@ const Home = (): JSX.Element => {
     isFetchingNextPage,
     hasNextPage,
     fetchNextPage,
-  } = useInfiniteQuery<string, Error, PageProps, any>({
+  } = useInfiniteQuery<
+    GetUsersResponse,
+    ErrorProps,
+    GetUsersResponse,
+    string[]
+  >({
     queryKey: ['items', queryText],
     enabled: searchEnabled,
-    getNextPageParam: () => responseData.nextPage ?? undefined,
-    queryFn: ({ pageParam = 1 }) => {
+    getNextPageParam: (prev: GetUsersResponse) => prev.nextPage,
+    queryFn: ({ pageParam = 1 }): Promise<GetUsersResponse> => {
       return getUsers({ pageParam, query: queryText }).then((response) => {
         setResponseData((prev) => ({
           ...prev,
@@ -148,7 +153,7 @@ const Home = (): JSX.Element => {
              */}
             <ul className='grid gap-x-6 gap-y-5 sm:grid-cols-2 lg:grid-cols-3 mb-8'>
               {data!.pages.flatMap((page) => {
-                return page.items.map((item: UserProps) => (
+                return page.items.map((item: GetUsersItem) => (
                   <li key={item.id} className='basis-1/3'>
                     <UserCard user={item} buttonLabel={buttonLabel} />
                   </li>

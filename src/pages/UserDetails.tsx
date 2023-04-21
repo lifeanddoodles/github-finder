@@ -3,12 +3,12 @@ import { useParams } from 'react-router-dom';
 import UserCardDetails from '../components/UserCardDetails';
 import { getSingleUser } from '../data/api';
 import { userDetailsPageTexts } from '../data/texts';
-import { ErrorProps, UserProps } from '../interfaces';
+import { ErrorProps, GetUserResponse } from '../interfaces';
 import NotFound from './NotFound';
 
 const { userError, loading } = userDetailsPageTexts;
 
-type Data = UserProps & ErrorProps;
+type Data = GetUserResponse & ErrorProps;
 
 const UserDetails = (): JSX.Element => {
   const { login } = useParams<'login'>();

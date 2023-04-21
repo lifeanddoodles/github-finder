@@ -7,7 +7,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useMemo } from 'react';
 import { userDetailsCardTexts } from '../data/texts';
-import { UserCardProps } from '../interfaces';
+import { UserCardDetailsProps } from '../interfaces';
 import Column from '../layout/Column';
 import Row from '../layout/Row';
 import { formatAmount } from '../utils';
@@ -18,7 +18,7 @@ import LinkWithIcon from './LinkWithIcon';
 
 const { repos, followers, following } = userDetailsCardTexts;
 
-const UserCardDetails = ({ user }: UserCardProps) => {
+const UserCardDetails = ({ user }: UserCardDetailsProps) => {
   const statistics = useMemo(
     () => ({
       repos: {
