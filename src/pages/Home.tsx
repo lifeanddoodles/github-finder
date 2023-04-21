@@ -4,7 +4,7 @@ import SearchBox from '../components/SearchBox';
 import UserCard from '../components/UserCard';
 import { getUsers } from '../data/api';
 import { errorHandling, homePageTexts } from '../data/texts';
-import { ErrorProps, GetUsersItem, GetUsersResponse } from '../interfaces';
+import { GetUsersItem, GetUsersResponse } from '../interfaces';
 import Header from '../layout/Header';
 import ResultsSection from '../layout/ResultsSection';
 
@@ -40,13 +40,8 @@ const Home = (): JSX.Element => {
     isFetchingNextPage,
     hasNextPage,
     fetchNextPage,
-  } = useInfiniteQuery<
-    GetUsersResponse,
-    ErrorProps,
-    GetUsersResponse,
-    string[]
-  >({
-    queryKey: ['items', queryText],
+  } = useInfiniteQuery<GetUsersResponse, Error, GetUsersResponse, string[]>({
+    queryKey: ['users', queryText],
     enabled: searchEnabled,
     getNextPageParam: (prev: GetUsersResponse) => prev.nextPage,
     queryFn: async ({ pageParam = 1 }): Promise<GetUsersResponse> => {

@@ -3,12 +3,12 @@ import { useParams } from 'react-router-dom';
 import UserCardDetails from '../components/UserCardDetails';
 import { getSingleUser } from '../data/api';
 import { userDetailsPageTexts } from '../data/texts';
-import { ErrorProps, GetUserResponse } from '../interfaces';
+import { GetUserResponse } from '../interfaces';
 import NotFound from './NotFound';
 
 const { userError, loading } = userDetailsPageTexts;
 
-type Data = GetUserResponse & ErrorProps;
+type Data = GetUserResponse & Error;
 
 const UserDetails = (): JSX.Element => {
   const { login } = useParams<'login'>();
@@ -17,7 +17,7 @@ const UserDetails = (): JSX.Element => {
     error,
     isLoading,
     isError,
-  } = useQuery<Data, ErrorProps>(['user', login], () => getSingleUser(login!));
+  } = useQuery<Data, Error>(['user', login], () => getSingleUser(login!));
 
   /*
    * If there is an error, display error message

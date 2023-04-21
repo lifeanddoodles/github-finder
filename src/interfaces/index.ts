@@ -69,8 +69,3 @@ export interface UserCardProps {
 export interface UserCardDetailsProps {
   user: GetUserResponse;
 }
-
-export interface ErrorProps {
-  message: string;
-  documentation_url: string;
-}
