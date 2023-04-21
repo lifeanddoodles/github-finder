@@ -28,6 +28,10 @@ const SearchBox: React.FC<SearchBoxProps> = ({
     [setQueryText],
   );
 
+  /*
+   * User must submit the form to enable the search
+   * and trigger the fetch request.
+   */
   const handleSubmit = useCallback(
     (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
