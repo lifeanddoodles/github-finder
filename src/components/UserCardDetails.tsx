@@ -5,7 +5,7 @@ import {
   faLocationDot,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { userDetailsTexts } from '../data/texts';
+import { userDetailsCardTexts } from '../data/texts';
 import { UserCardProps } from '../interfaces';
 import Column from '../layout/Column';
 import Row from '../layout/Row';
@@ -15,7 +15,7 @@ import Card from './Card';
 import ContactItem from './ContactItem';
 import LinkWithIcon from './LinkWithIcon';
 
-const { repos, followers, following } = userDetailsTexts;
+const { repos, followers, following } = userDetailsCardTexts;
 
 const UserCardDetails = ({ user }: UserCardProps) => {
   const statistics = {
@@ -90,9 +90,9 @@ const UserCardDetails = ({ user }: UserCardProps) => {
         <Column className='w-full lg:pt-8'>
           <Row className='flex flex-col gap-4 md:flex-row md:gap-x-6 lg:gap-x-16'>
             <Column className='md:basis-1/2'>
-              <h1 className='text-3xl mb-4'>{user.name}</h1>
-              <h2 className='text-xl mb-5'>{user.login}</h2>
-              <p className='mb-5'>{user.bio}</p>
+              {user.name && <h1 className='text-3xl mb-4'>{user.name}</h1>}
+              {user.login && <h2 className='text-xl mb-5'>{user.login}</h2>}
+              {user.bio && <p className='mb-5'>{user.bio}</p>}
             </Column>
             <Column className='md:basis-1/2'>
               <LinkWithIcon

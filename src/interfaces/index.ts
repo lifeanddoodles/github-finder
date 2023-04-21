@@ -29,3 +29,8 @@ export interface DataProps {
   pageParams: number[];
   pages: PageProps[];
 }
+
+export interface ErrorProps {
+  message: string;
+  documentation_url: string;
+}

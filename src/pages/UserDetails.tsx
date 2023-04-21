@@ -2,27 +2,34 @@ import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 import UserCardDetails from '../components/UserCardDetails';
 import { getSingleUser } from '../data/api';
+import { userDetailsPageTexts } from '../data/texts';
+import { ErrorProps, UserProps } from '../interfaces';
+import NotFound from './NotFound';
 
-const UserDetails = () => {
+const { userError, loading } = userDetailsPageTexts;
+
+type Data = UserProps & ErrorProps;
+
+const UserDetails = (): JSX.Element => {
   const { login } = useParams<'login'>();
   const {
     data: user,
+    error,
     isLoading,
     isError,
-    error,
-  } = useQuery(['user', login], () => getSingleUser(login!));
+  } = useQuery<Data, ErrorProps>(['user', login], () => getSingleUser(login!));
 
-  if (isLoading) return <p>Loading...</p>;
-
-  // if (isError) {
-  //   return <div>Error loading user data: {error?.message}</div>;
-  // }
-
-  if (!user) {
-    return <div>User not found</div>;
+  if (isError) {
+    return (
+      <div>
+        {userError} {error?.message}
+      </div>
+    );
   }
 
-  return <UserCardDetails user={user} />;
+  if (isLoading) return <p>{loading}</p>;
+
+  return !user || user.message ? <NotFound /> : <UserCardDetails user={user} />;
 };
 
 export default UserDetails;

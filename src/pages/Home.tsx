@@ -14,8 +14,10 @@ const {
   totalResults,
   searchBoxLabel,
   searchBoxPlaceholder,
+  searchBoxSubmit,
   loading,
   loadMore,
+  noResultsFound,
 } = homePageTexts;
 
 interface ResponseDataProps {
@@ -70,6 +72,7 @@ const Home = (): JSX.Element => {
         <SearchBox
           label={searchBoxLabel}
           placeholder={searchBoxPlaceholder}
+          submitLabel={searchBoxSubmit}
           queryText={queryText}
           setQueryText={setQueryText}
           onSubmit={handleSearchSubmit}
@@ -78,17 +81,33 @@ const Home = (): JSX.Element => {
       </Header>
       <ResultsSection className='flex flex-col max-w-screen-lg mx-auto'>
         {!data && (
-          <div role='status' className='sr-only'>
-            {status === 'loading' && <h1>{loading}</h1>}
-            {status === 'error' && <h1>{JSON.stringify(error)}</h1>}
-          </div>
+          <>
+            {status === 'loading' && (
+              <h1 role='status' className='text-3xl'>
+                {loading}
+              </h1>
+            )}
+            {status === 'error' && (
+              <h1 role='status' className='text-3xl'>
+                {JSON.stringify(error)}
+              </h1>
+            )}
+          </>
         )}
         {data && (
           <>
-            <p role='status' className='sr-only'>
-              {data!.pages.flatMap((page) => page.items).length} /{' '}
-              {responseData.totalCount} {totalResults}
-            </p>
+            {data!.pages.flatMap((page) => page.items).length > 0 ? (
+              <p role='status' className='sr-only'>
+                {totalResults(
+                  data!.pages.flatMap((page) => page.items).length,
+                  responseData.totalCount!,
+                )}
+              </p>
+            ) : (
+              <h1 role='status' className='text-3xl'>
+                {noResultsFound}
+              </h1>
+            )}
             <ul className='grid gap-x-6 gap-y-5 sm:grid-cols-2 lg:grid-cols-3 mb-8'>
               {data!.pages.flatMap((page) => {
                 return page.items.map((item: UserProps) => (
