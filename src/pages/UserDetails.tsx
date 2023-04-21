@@ -19,6 +19,9 @@ const UserDetails = (): JSX.Element => {
     isError,
   } = useQuery<Data, ErrorProps>(['user', login], () => getSingleUser(login!));
 
+  /*
+   * If there is an error, display error message
+   */
   if (isError) {
     return (
       <div>
@@ -27,8 +30,15 @@ const UserDetails = (): JSX.Element => {
     );
   }
 
-  if (isLoading) return <p>{loading}</p>;
+  /*
+   * Show loading message while user data is loaded
+   */
+  if (isLoading) return <h1 className='mx-auto max-w-screen-lg'>{loading}</h1>;
 
+  /*
+   * If there is an error in the user data show Not Found page,
+   * otherwise display data in a card.
+   */
   return !user || user.message ? <NotFound /> : <UserCardDetails user={user} />;
 };
 

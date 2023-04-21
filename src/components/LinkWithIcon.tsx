@@ -16,6 +16,7 @@ const LinkWithIcon: React.FC<LinkWithIconProps> = ({
   className,
 }) => {
   const externalPatterns = useMemo(() => ['http', 'mailto:', 'tel:'], []);
+
   /*
    * Check if URL matches one of the protocol or attributes
    * and return match for further tests.

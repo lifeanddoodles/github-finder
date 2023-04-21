@@ -18,7 +18,7 @@ export const userCardTexts = {
 
 export const userDetailsPageTexts = {
   userError: 'Error loading user data:',
-  loading: 'Loading...',
+  loading: 'Loading user data',
 };
 
 export const userDetailsCardTexts = {

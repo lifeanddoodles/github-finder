@@ -57,6 +57,11 @@ const Home = (): JSX.Element => {
     },
   });
 
+  /*
+   * Reset previous response data (used in the return section)
+   * and enable search, which is disabled by default
+   * and after each fetch to prevent unnecessary rerenders
+   */
   const handleSearchSubmit = useCallback(() => {
     setResponseData((prev) => ({
       ...prev,
@@ -70,10 +75,16 @@ const Home = (): JSX.Element => {
     setQueryText('type:user');
   }, []);
 
+  /*
+   * Submit initial query (type:user) on mount
+   */
   useEffect(() => {
     handleSearchSubmit();
   }, [handleSearchSubmit]);
 
+  /*
+   * If there is no query from the searchbox, use fallback query
+   */
   useEffect(() => {
     if (!queryText) setFallbackQuery();
   }, [queryText, setFallbackQuery]);
@@ -94,6 +105,9 @@ const Home = (): JSX.Element => {
       </Header>
       <ResultsSection className='flex flex-col max-w-screen-lg mx-auto'>
         {!data && (
+          /*
+           * Handle status messages when there is no data
+           */
           <>
             {!searchEnabled && status === 'loading' && (
               <h1 role='status' className='text-3xl'>
@@ -114,6 +128,9 @@ const Home = (): JSX.Element => {
         )}
         {data && (
           <>
+            {/*
+             * Handle status messages when there is no data
+             */}
             {data!.pages.flatMap((page) => page.items).length > 0 ? (
               <p role='status' className='sr-only'>
                 {totalResults(
@@ -126,6 +143,9 @@ const Home = (): JSX.Element => {
                 {noResultsFound}
               </h1>
             )}
+            {/*
+             * Display found search results
+             */}
             <ul className='grid gap-x-6 gap-y-5 sm:grid-cols-2 lg:grid-cols-3 mb-8'>
               {data!.pages.flatMap((page) => {
                 return page.items.map((item: UserProps) => (
@@ -136,6 +156,10 @@ const Home = (): JSX.Element => {
               })}
             </ul>
             {hasNextPage && (
+              /*
+               * Show button to load the next page items
+               * only if there are still results left.
+               */
               <button
                 onClick={() => fetchNextPage()}
                 className='border px-5 py-3 rounded self-end hover:text-gray-100 hover:bg-[#31b59f] hover:border-[#31b59f]'
