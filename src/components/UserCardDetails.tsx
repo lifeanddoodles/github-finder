@@ -1,9 +1,18 @@
+import { faGithub, faTwitter } from '@fortawesome/free-brands-svg-icons';
+import {
+  faEnvelope,
+  faLink,
+  faLocationDot,
+} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { userDetailsTexts } from '../data/texts';
 import { UserCardProps } from '../interfaces';
 import Column from '../layout/Column';
 import Row from '../layout/Row';
+import { formatAmount } from '../utils';
 import Avatar from './Avatar';
 import Card from './Card';
+import ContactItem from './ContactItem';
 import LinkWithIcon from './LinkWithIcon';
 
 const { repos, followers, following } = userDetailsTexts;
@@ -27,23 +36,43 @@ const UserCardDetails = ({ user }: UserCardProps) => {
   const contactDetails = {
     location: {
       label: user.location,
-      url: user.location,
-      icon: 'location',
+      url: null,
+      icon: (
+        <FontAwesomeIcon
+          icon={faLocationDot}
+          size='lg'
+          className='w-full max-h-6'
+        />
+      ),
     },
     email: {
       label: user.email,
-      url: `mailto=${user.email}`,
-      icon: 'email',
+      url: `mailto:${user.email}`,
+      icon: (
+        <FontAwesomeIcon
+          icon={faEnvelope}
+          size='lg'
+          className='w-full max-h-6'
+        />
+      ),
     },
     twitter: {
       label: user.twitter_username,
-      url: user.twitter_username,
-      icon: 'twitter',
+      url: `https://twitter.com/${user.twitter_username}`,
+      icon: (
+        <FontAwesomeIcon
+          icon={faTwitter}
+          size='lg'
+          className='w-full max-h-6'
+        />
+      ),
     },
     blog: {
       label: user.blog,
       url: user.blog,
-      icon: 'blog',
+      icon: (
+        <FontAwesomeIcon icon={faLink} size='lg' className='w-full max-h-6' />
+      ),
     },
   };
 
@@ -58,7 +87,7 @@ const UserCardDetails = ({ user }: UserCardProps) => {
         <Column className='flex-none'>
           <Avatar src={user.avatar_url} className='w-24' />
         </Column>
-        <Column className='lg:pt-8'>
+        <Column className='w-full lg:pt-8'>
           <Row className='flex flex-col gap-4 md:flex-row md:gap-x-6 lg:gap-x-16'>
             <Column className='md:basis-1/2'>
               <h1 className='text-3xl mb-4'>{user.name}</h1>
@@ -67,17 +96,25 @@ const UserCardDetails = ({ user }: UserCardProps) => {
             </Column>
             <Column className='md:basis-1/2'>
               <LinkWithIcon
-                icon='GH'
+                icon={
+                  <FontAwesomeIcon
+                    icon={faGithub}
+                    size='lg'
+                    className='w-full max-h-6'
+                  />
+                }
                 url={user.html_url}
                 label={user.login}
-                className='inline-block mb-6 text-2xl'
+                className='gap-2 mb-6 text-2xl'
               />
               <ul className='rounded-3xl bg-gray-100 mb-11 flex flex-col sm:flex-row sm:justify-center md:flex-wrap lg:flex-nowrap'>
                 {Object.values(statistics).map((statistic) => (
                   <li key={statistic.title} className='flex-1'>
                     <Column className='px-8 py-6 items-center'>
                       <h3 className='text-gray-500'>{statistic.title}</h3>
-                      <span className='text-3xl'>{statistic.value}</span>
+                      <span className='text-3xl'>
+                        {formatAmount(statistic.value!)}
+                      </span>
                     </Column>
                   </li>
                 ))}
@@ -87,13 +124,13 @@ const UserCardDetails = ({ user }: UserCardProps) => {
           {contactDetailsNotEmpty && (
             <ul className='md:columns-2 md:gap-4 lg:gap-x-16'>
               {Object.entries(contactDetails).map(([key, value]) => {
-                return value.label && value.url ? (
+                return value.label ? (
                   <li key={key} className='md:w-full'>
-                    <LinkWithIcon
+                    <ContactItem
                       icon={value.icon}
                       label={value.label}
-                      url={value.url}
-                      className='inline-block mb-6 text-2xl'
+                      url={value?.url}
+                      className='gap-2 mb-6 text-2xl'
                     />
                   </li>
                 ) : null;

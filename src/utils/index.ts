@@ -2,6 +2,7 @@ export enum METHOD_VERB {
   GET = 'GET',
   POST = 'POST',
 }
+
 export const request = async (
   url: string,
   data?: object,
@@ -22,4 +23,8 @@ export const request = async (
   } catch (error) {
     console.error('Error:', error);
   }
+};
+
+export const formatAmount = (value: number) => {
+  return new Intl.NumberFormat().format(value);
 };

@@ -65,7 +65,7 @@ const Home = (): JSX.Element => {
 
   return (
     <>
-      <Header className='flex flex-col md:flex-row gap-x-5 justify-between'>
+      <Header className='flex flex-col md:flex-row gap-x-5 justify-between max-w-screen-lg mx-auto'>
         <h1 className='text-4xl font-normal mb-8'>{title}</h1>
         <SearchBox
           label={searchBoxLabel}
@@ -76,7 +76,7 @@ const Home = (): JSX.Element => {
           className='block mb-8 w-full md:max-w-xs'
         />
       </Header>
-      <ResultsSection className='flex flex-col'>
+      <ResultsSection className='flex flex-col max-w-screen-lg mx-auto'>
         {!data && (
           <div role='status' className='sr-only'>
             {status === 'loading' && <h1>{loading}</h1>}
@@ -101,7 +101,7 @@ const Home = (): JSX.Element => {
             {hasNextPage && (
               <button
                 onClick={() => fetchNextPage()}
-                className='border px-5 py-3 rounded self-end'
+                className='border px-5 py-3 rounded self-end hover:text-gray-100 hover:bg-[#31b59f] hover:border-[#31b59f]'
               >
                 {isFetchingNextPage ? loading : loadMore}
               </button>
