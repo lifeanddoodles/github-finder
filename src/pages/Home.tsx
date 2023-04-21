@@ -1,5 +1,5 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import SearchBox from '../components/SearchBox';
 import UserCard from '../components/UserCard';
 import { getUsers } from '../data/api';
@@ -18,6 +18,7 @@ const {
   loading,
   loadMore,
   noResultsFound,
+  confirmSearch,
 } = homePageTexts;
 
 interface ResponseDataProps {
@@ -26,7 +27,7 @@ interface ResponseDataProps {
 }
 
 const Home = (): JSX.Element => {
-  const [queryText, setQueryText] = useState<string>('');
+  const [queryText, setQueryText] = useState<string>('type:user');
   const [searchEnabled, setSearchEnabled] = useState<boolean>(false);
   const [responseData, setResponseData] = useState<ResponseDataProps>({
     nextPage: undefined,
@@ -56,14 +57,26 @@ const Home = (): JSX.Element => {
     },
   });
 
-  const handleSearchSubmit = () => {
+  const handleSearchSubmit = useCallback(() => {
     setResponseData((prev) => ({
       ...prev,
       nextPage: undefined,
       totalCount: null,
     }));
     setSearchEnabled(true);
-  };
+  }, []);
+
+  const setFallbackQuery = useCallback(() => {
+    setQueryText('type:user');
+  }, []);
+
+  useEffect(() => {
+    handleSearchSubmit();
+  }, [handleSearchSubmit]);
+
+  useEffect(() => {
+    if (!queryText) setFallbackQuery();
+  }, [queryText, setFallbackQuery]);
 
   return (
     <>
@@ -82,7 +95,12 @@ const Home = (): JSX.Element => {
       <ResultsSection className='flex flex-col max-w-screen-lg mx-auto'>
         {!data && (
           <>
-            {status === 'loading' && (
+            {!searchEnabled && status === 'loading' && (
+              <h1 role='status' className='text-3xl'>
+                {confirmSearch}
+              </h1>
+            )}
+            {searchEnabled && status === 'loading' && (
               <h1 role='status' className='text-3xl'>
                 {loading}
               </h1>

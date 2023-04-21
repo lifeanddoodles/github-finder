@@ -9,6 +9,7 @@ export const homePageTexts = {
   loading: 'Loading...',
   loadMore: 'Load more',
   noResultsFound: 'No results found, please try another search.',
+  confirmSearch: 'Click the Search icon or press Enter to see the results',
 };
 
 export const userCardTexts = {

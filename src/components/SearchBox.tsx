@@ -1,6 +1,6 @@
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction, useCallback } from 'react';
 
 interface SearchBoxProps {
   label: string;
@@ -21,15 +21,21 @@ const SearchBox: React.FC<SearchBoxProps> = ({
   onSubmit,
   className,
 }) => {
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setQueryText(event.target.value);
-  };
+  const handleChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setQueryText(event.target.value);
+    },
+    [setQueryText],
+  );
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const handleSubmit = useCallback(
+    (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
 
-    if (queryText) onSubmit((prev) => !!prev);
-  };
+      if (queryText) onSubmit((prev) => !!prev);
+    },
+    [onSubmit, queryText],
+  );
 
   return (
     <form

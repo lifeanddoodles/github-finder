@@ -5,6 +5,7 @@ import {
   faLocationDot,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useMemo } from 'react';
 import { userDetailsCardTexts } from '../data/texts';
 import { UserCardProps } from '../interfaces';
 import Column from '../layout/Column';
@@ -18,68 +19,77 @@ import LinkWithIcon from './LinkWithIcon';
 const { repos, followers, following } = userDetailsCardTexts;
 
 const UserCardDetails = ({ user }: UserCardProps) => {
-  const statistics = {
-    repos: {
-      title: repos,
-      value: user.public_repos,
-    },
-    followers: {
-      title: followers,
-      value: user.followers,
-    },
-    following: {
-      title: following,
-      value: user.following,
-    },
-  };
+  const statistics = useMemo(
+    () => ({
+      repos: {
+        title: repos,
+        value: user.public_repos,
+      },
+      followers: {
+        title: followers,
+        value: user.followers,
+      },
+      following: {
+        title: following,
+        value: user.following,
+      },
+    }),
+    [user.followers, user.following, user.public_repos],
+  );
 
-  const contactDetails = {
-    location: {
-      label: user.location,
-      url: null,
-      icon: (
-        <FontAwesomeIcon
-          icon={faLocationDot}
-          size='lg'
-          className='w-full max-h-6'
-        />
-      ),
-    },
-    email: {
-      label: user.email,
-      url: `mailto:${user.email}`,
-      icon: (
-        <FontAwesomeIcon
-          icon={faEnvelope}
-          size='lg'
-          className='w-full max-h-6'
-        />
-      ),
-    },
-    twitter: {
-      label: user.twitter_username,
-      url: `https://twitter.com/${user.twitter_username}`,
-      icon: (
-        <FontAwesomeIcon
-          icon={faTwitter}
-          size='lg'
-          className='w-full max-h-6'
-        />
-      ),
-    },
-    blog: {
-      label: user.blog,
-      url: user.blog,
-      icon: (
-        <FontAwesomeIcon icon={faLink} size='lg' className='w-full max-h-6' />
-      ),
-    },
-  };
+  const contactDetails = useMemo(
+    () => ({
+      location: {
+        label: user.location,
+        url: null,
+        icon: (
+          <FontAwesomeIcon
+            icon={faLocationDot}
+            size='lg'
+            className='w-full max-h-6'
+          />
+        ),
+      },
+      email: {
+        label: user.email,
+        url: `mailto:${user.email}`,
+        icon: (
+          <FontAwesomeIcon
+            icon={faEnvelope}
+            size='lg'
+            className='w-full max-h-6'
+          />
+        ),
+      },
+      twitter: {
+        label: user.twitter_username,
+        url: `https://twitter.com/${user.twitter_username}`,
+        icon: (
+          <FontAwesomeIcon
+            icon={faTwitter}
+            size='lg'
+            className='w-full max-h-6'
+          />
+        ),
+      },
+      blog: {
+        label: user.blog,
+        url: user.blog,
+        icon: (
+          <FontAwesomeIcon icon={faLink} size='lg' className='w-full max-h-6' />
+        ),
+      },
+    }),
+    [user.blog, user.email, user.location, user.twitter_username],
+  );
 
-  const contactDetailsNotEmpty =
-    Object.values(contactDetails)
-      .map((item) => item.label)
-      .filter(Boolean).length > 0;
+  const contactDetailsNotEmpty = useMemo(
+    () =>
+      Object.values(contactDetails)
+        .map((item) => item.label)
+        .filter(Boolean).length > 0,
+    [contactDetails],
+  );
 
   return (
     <Card className='mx-auto px-9 pt-11 pb-16 rounded-lg max-w-screen-lg'>
@@ -92,7 +102,7 @@ const UserCardDetails = ({ user }: UserCardProps) => {
             <Column className='md:basis-1/2'>
               {user.name && <h1 className='text-3xl mb-4'>{user.name}</h1>}
               {user.login && <h2 className='text-xl mb-5'>{user.login}</h2>}
-              {user.bio && <p className='mb-5'>{user.bio}</p>}
+              {user.bio && <p className='mb-5 md:mb-11'>{user.bio}</p>}
             </Column>
             <Column className='md:basis-1/2'>
               <LinkWithIcon
