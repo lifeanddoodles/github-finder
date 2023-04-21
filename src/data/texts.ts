@@ -33,3 +33,9 @@ export const notFoundPageTexts = {
     'It seems there was an error and the page/profile does not exist. You can try another search.',
   goBackLabel: 'Go to homepage',
 };
+
+export const errorHandling = {
+  consoleLabel: 'Not found',
+  errorGetUsers: 'Unable to fetch users',
+  errorFetchRequest: 'Error fetching data',
+};

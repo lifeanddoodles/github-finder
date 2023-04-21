@@ -1,3 +1,5 @@
+import { errorHandling } from '../data/texts';
+
 export enum METHOD_VERB {
   GET = 'GET',
   POST = 'POST',
@@ -14,6 +16,7 @@ export const request = async (
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
+        Authorization: `Bearer ${process.env.REACT_APP_GITHUB_ACCESS_TOKEN}`,
       },
       body: JSON.stringify(data),
     });
@@ -21,7 +24,8 @@ export const request = async (
     const result = await response.json();
     return result;
   } catch (error) {
-    console.error('Error:', error);
+    console.error(errorHandling.consoleLabel, error);
+    throw new Error(errorHandling.errorFetchRequest);
   }
 };
 

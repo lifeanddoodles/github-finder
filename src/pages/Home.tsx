@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from 'react';
 import SearchBox from '../components/SearchBox';
 import UserCard from '../components/UserCard';
 import { getUsers } from '../data/api';
-import { homePageTexts } from '../data/texts';
+import { errorHandling, homePageTexts } from '../data/texts';
 import { ErrorProps, GetUsersItem, GetUsersResponse } from '../interfaces';
 import Header from '../layout/Header';
 import ResultsSection from '../layout/ResultsSection';
@@ -21,8 +21,9 @@ const {
   confirmSearch,
 } = homePageTexts;
 
+const { consoleLabel, errorGetUsers } = errorHandling;
+
 interface ResponseDataProps {
-  nextPage: number | undefined;
   totalCount: number | null;
 }
 
@@ -30,7 +31,6 @@ const Home = (): JSX.Element => {
   const [queryText, setQueryText] = useState<string>('type:user');
   const [searchEnabled, setSearchEnabled] = useState<boolean>(false);
   const [responseData, setResponseData] = useState<ResponseDataProps>({
-    nextPage: undefined,
     totalCount: null,
   });
   const {
@@ -49,16 +49,19 @@ const Home = (): JSX.Element => {
     queryKey: ['items', queryText],
     enabled: searchEnabled,
     getNextPageParam: (prev: GetUsersResponse) => prev.nextPage,
-    queryFn: ({ pageParam = 1 }): Promise<GetUsersResponse> => {
-      return getUsers({ pageParam, query: queryText }).then((response) => {
+    queryFn: async ({ pageParam = 1 }): Promise<GetUsersResponse> => {
+      try {
+        const response = await getUsers({ pageParam, query: queryText });
         setResponseData((prev) => ({
           ...prev,
-          nextPage: response.nextPage,
           ...(prev.totalCount === null && { totalCount: response.total_count }),
         }));
         setSearchEnabled(false);
         return response;
-      });
+      } catch (error) {
+        console.error(consoleLabel, error);
+        throw new Error(errorGetUsers);
+      }
     },
   });
 
@@ -70,7 +73,6 @@ const Home = (): JSX.Element => {
   const handleSearchSubmit = useCallback(() => {
     setResponseData((prev) => ({
       ...prev,
-      nextPage: undefined,
       totalCount: null,
     }));
     setSearchEnabled(true);
@@ -136,7 +138,7 @@ const Home = (): JSX.Element => {
             {/*
              * Handle status messages when there is no data
              */}
-            {data!.pages.flatMap((page) => page.items).length > 0 ? (
+            {data!.pages?.flatMap((page) => page.items).length > 0 ? (
               <p role='status' className='sr-only'>
                 {totalResults(
                   data!.pages.flatMap((page) => page.items).length,
@@ -152,8 +154,8 @@ const Home = (): JSX.Element => {
              * Display found search results
              */}
             <ul className='grid gap-x-6 gap-y-5 sm:grid-cols-2 lg:grid-cols-3 mb-8'>
-              {data!.pages.flatMap((page) => {
-                return page.items.map((item: GetUsersItem) => (
+              {data!.pages?.flatMap((page) => {
+                return page?.items.map((item: GetUsersItem) => (
                   <li key={item.id} className='basis-1/3'>
                     <UserCard user={item} buttonLabel={buttonLabel} />
                   </li>
